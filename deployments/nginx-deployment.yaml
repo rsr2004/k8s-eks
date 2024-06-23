@@ -23,16 +23,16 @@ spec:
             - name: nginx-config
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
-            - name: rafaelsraposo.cloudns.be
+            - name: rafael-tls
               mountPath: /etc/ssl/certs
               readOnly: true
       volumes:
         - name: nginx-config
           configMap:
             name: nginx-config
-        - name: rafaelsraposo.cloudns.be
+        - name: rafael-tls
           secret:
-            secretName: rafaelsraposo.cloudns.be
+            secretName: rafael-tls
 
 ---
 apiVersion: v1

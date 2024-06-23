@@ -7,7 +7,7 @@ provisioner: efs.csi.aws.com
 parameters:
   provisioningMode: efs-ap
   fileSystemId: fs-03a485385df150cce  # Replace with your EFS file system ID
-  accessPointId: fsap-09c413839179efafb # Replace with your EFS access point ID
+  accessPointId: fsap-00fda0d64e8d376b1 # Replace with your EFS access point ID
   directoryPerms: "700"
   gidRangeStart: "1000"
   gidRangeEnd: "2000"

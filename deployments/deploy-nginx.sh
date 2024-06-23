@@ -5,7 +5,8 @@ kubectl create secret generic rafael-tls \
   --from-file=privkey.pem=/home/ec2-user/certs/privkey1.pem \
   -n default
 
-kubectl apply -f nginx-ingress-controller.yaml
+kubectl apply -f nginx-configmap.yaml
+kubectl apply -f nginx-deployment.yaml
 
 # Wait for the NGINX deployment to be ready
 kubectl rollout status deployment/nginx-proxy

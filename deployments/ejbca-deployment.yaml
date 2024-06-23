@@ -1,4 +1,3 @@
-# ejbca-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -45,4 +44,3 @@ spec:
     #      targetPort: 8080
     - protocol: TCP
       port: 8443
-      targetPort: 8443

@@ -1,3 +1,4 @@
+# postgres-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -12,23 +13,59 @@ spec:
       labels:
         app: postgres
     spec:
+      securityContext:
+        fsGroup: 1001 # Replace with the correct group ID from your EFS Access Point
       containers:
-      - name: postgres
-        image: postgres:latest
-        env:
-          - name: POSTGRES_DB
-            value: plik_db
-          - name: POSTGRES_USER
-            value: plik_user
-          - name: POSTGRES_PASSWORD
-            value: password  # Replace with a secure password
-        ports:
-          - containerPort: 5432
+        - name: postgres
+          image: postgres:13
+          env:
+            - name: POSTGRES_DB
+              value: defaultdb
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: postgres_password
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+            - name: init-db
+              mountPath: /docker-entrypoint-initdb.d
+          securityContext:
+            runAsUser: 1001 # Replace with the correct user ID from your EFS Access Point
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: efs-pvc
+        - name: init-db
+          configMap:
+            name: postgres-init-scripts
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-scripts
+data:
+  init.sql: |
+    CREATE DATABASE ejbca;
+    CREATE DATABASE plik;
+    CREATE DATABASE wikijs;
+    CREATE DATABASE onetime;
+    CREATE USER ejbca_user WITH ENCRYPTED PASSWORD 'ejbca_password';
+    CREATE USER plik_user WITH ENCRYPTED PASSWORD 'plik_password';
+    CREATE USER wikijs_user WITH ENCRYPTED PASSWORD 'wikijs_password';
+    CREATE USER onetime_user WITH ENCRYPTED PASSWORD 'onetime_password';
+    GRANT ALL PRIVILEGES ON DATABASE ejbca TO ejbca_user;
+    GRANT ALL PRIVILEGES ON DATABASE plik TO plik_user;
+    GRANT ALL PRIVILEGES ON DATABASE wikijs TO wikijs_user;
+    GRANT ALL PRIVILEGES ON DATABASE onetime TO onetime_user;
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres-service
+  name: postgres
 spec:
   selector:
     app: postgres
@@ -36,4 +73,3 @@ spec:
     - protocol: TCP
       port: 5432
       targetPort: 5432
-

@@ -1,0 +1,16 @@
+# efs-storage-class.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: efs-sc
+provisioner: efs.csi.aws.com
+parameters:
+  provisioningMode: efs-ap
+  fileSystemId: fs-03a485385df150cce  # Replace with your EFS file system ID
+  accessPointId: fsap-00fda0d64e8d376b1 # Replace with your EFS access point ID
+  directoryPerms: "700"
+  gidRangeStart: "1000"
+  gidRangeEnd: "2000"
+  basePath: "/data"
+reclaimPolicy: Retain
+volumeBindingMode: Immediate

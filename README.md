@@ -34,8 +34,8 @@ Before you begin, ensure you have the following installed:
 Clone this repository to your local machine:
 
 ```sh
-git clone https://github.com/gonresendes/eks.git
-cd eks
+git clone https://github.com/rsr2004/k8s-eks.git
+cd k8s-eks/deployments/
 ```
 
 ## Configure Nginx
@@ -46,7 +46,7 @@ Create Secrets
 Create Kubernetes secrets for your SSL certificates:
 
 ```
-kubectl create secret tls resendes-tls --cert=/home/ec2-user/certs/fullchain1.pem --key=/home/ec2-user/certs/privkey1.pem
+kubectl create secret tls rafael-tls --cert=/home/ec2-user/certs/fullchain1.pem --key=/home/ec2-user/certs/privkey1.pem
 ```
 
 ## Deploy
@@ -55,16 +55,16 @@ Deploy the Nginx proxy and your applications using the provided Kubernetes manif
 
 
 ```
+kubectl apply -f nginx-configmap.yaml
 kubectl apply -f nginx-deployment.yaml
-kubectl apply -f nginx-service.yaml
 ```
 
 Ensure your applications (e.g., plik-service, wiki-service, secret-service) are deployed and running in the default namespace.
 Accessing the Applications
 
-Your applications will be accessible via the following URLs (assuming your domain is resendes.cloudns.be):
+Your applications will be accessible via the following URLs (assuming your domain is rafaelsraposo.cloudns.be):
 
-    http://plik.resendes.cloudns.be (redirects to HTTPS)
-    http://wiki.resendes.cloudns.be (redirects to HTTPS)
-    http://onetimesecret.resendes.cloudns.be (redirects to HTTPS)
-    https://cert.resendes.cloudns.be/ejbca/adminweb
+    http://plik.rafaelsraposo.cloudns.be (redirects to HTTPS)
+    http://wiki.rafaelsraposo.cloudns.be (redirects to HTTPS)
+    http://onetimesecret.rafaelsraposo.cloudns.be (redirects to HTTPS)
+    https://cert.rafaelsraposo.cloudns.be/ejbca/adminweb
